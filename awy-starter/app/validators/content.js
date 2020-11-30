@@ -27,8 +27,8 @@ class AddContentValidator extends LinValidator {
         ]
 
         this.pubdate = [
-            new Rule('isNotEmpty', '发布内容不能为空'),
-            new Rule('isIS08601', '发布日期格式不正确'),
+            new Rule('isNotEmpty', '发布日期不能为空'),
+            new Rule('isISO8601', '发布日期格式不正确'),
         ]
 
         this.status = [

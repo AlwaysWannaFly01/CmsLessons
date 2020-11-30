@@ -18,6 +18,11 @@ contentApi.post('/', async (ctx) => {
     //4.返回成功
 });
 
+contentApi.get('/', async ctx => {
+    const contentList = await ContentService.getContentList();
+    ctx.json(contentList)
+})
+
 module.exports = {
     contentApi
 };

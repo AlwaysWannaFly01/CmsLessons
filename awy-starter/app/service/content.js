@@ -4,6 +4,23 @@ import {SentenceDao} from "../dao/sentence";
 import {NotFound} from 'lin-mizar';
 
 class Content {
+    static async getContentList() {
+        const movieList = await MovieDao.getMovieList();
+        const musicList = await MusicDao.getMusicList();
+        const sentenceList = await SentenceDao.getSentenceList();
+
+        let res = [];
+        res.push.apply(res, movieList)
+        res.push.apply(res, musicList)
+        res.push.apply(res, sentenceList)
+
+        /*按照创建时间倒叙排列*/
+        res.sort((a, b) => {
+            return b.created_at - a.created_at
+        });
+        return res;
+    }
+
     static async addContent(v) {
         switch (v['type']) {
             case 100:

@@ -19,10 +19,6 @@ Sentence.init(
             type: Sequelize.STRING(300),
             allowNull: true
         },
-        url:{
-            type: Sequelize.STRING(100),
-            allowNull: true
-        },
         pubdate: {
             type: Sequelize.DATE,
             allowNull: true,
