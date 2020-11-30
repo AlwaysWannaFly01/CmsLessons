@@ -1,16 +1,23 @@
-import { LinRouter } from 'lin-mizar'
+import {LinRouter} from 'lin-mizar';
+import {AddContentValidator} from "../../validators/content";
+import {ContentService} from "../../service/content";
 
 const contentApi = new LinRouter({
-    prefix: '/v1/content',
-})
+    prefix: '/v1/content'
+});
 
 contentApi.post('/', async (ctx) => {
-    const test = {
-        res: true,
-    }
-    return ctx.json(test)
-})
+    //1.参数校验
+    const v = await new AddContentValidator().validate(ctx)
+    //2.执行业务逻辑
+    //3.插入数据库
+    await ContentService.addContent(v.get('body'))
+    ctx.success({
+        msg: '期刊内容新增成功'
+    })
+    //4.返回成功
+});
 
 module.exports = {
-    contentApi,
-}
+    contentApi
+};
