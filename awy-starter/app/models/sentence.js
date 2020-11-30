@@ -42,6 +42,7 @@ Sentence.init(
         tableName: 'sentence',
         //定义模型名称
         modelName: 'sentence',
+        //这意味着偏执表会执行记录的 软删除,而不是 硬删除;当你调用 destroy 方法时,将发生软删除
         paranoid: true,
         underscored:true,
         //自动导入时间

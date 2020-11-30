@@ -20,6 +20,12 @@ class Movie {
 
         return await movie.update({...params})
     }
+
+    static async deleteMovieById(id) {
+        return await MovieModel.destroy({
+            where: {id},
+        })
+    }
 }
 
 export {Movie as MovieDao}

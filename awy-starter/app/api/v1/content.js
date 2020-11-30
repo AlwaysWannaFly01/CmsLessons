@@ -1,5 +1,5 @@
 import {LinRouter} from 'lin-mizar';
-import {AddContentValidator, EditContentValitator} from "../../validators/content";
+import {AddContentValidator, DeleteContentValitator, EditContentValitator} from "../../validators/content";
 import {ContentService} from "../../service/content";
 
 const contentApi = new LinRouter({
@@ -33,6 +33,18 @@ contentApi.put('/:id', async ctx => {
     await ContentService.editContent(id, params);
     ctx.success({
         msg: '期刊内容编辑成功'
+    })
+})
+
+/*删除期刊内容*/
+
+contentApi.delete('/:id', async ctx => {
+    const v = await new DeleteContentValitator().validate(ctx);
+    const id = v.get('path.id');
+    const type = v.get('query.type');
+    await ContentService.deleteContent(id, type)
+    ctx.success({
+        msg: '期刊内容删除成功'
     })
 })
 

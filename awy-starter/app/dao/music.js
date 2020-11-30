@@ -20,6 +20,12 @@ class Music {
 
         return await music.update({...params})
     }
+
+    static async deleteMusicById(id) {
+        return await MusicModel.destroy({
+            where: {id},
+        })
+    }
 }
 
 export {Music as MusicDao}

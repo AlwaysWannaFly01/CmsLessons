@@ -20,6 +20,12 @@ class Sentence {
 
         return await sentence.update({...params})
     }
+
+    static async deleteSentenceById(id) {
+        return await SentenceModel.destroy({
+            where: {id},
+        })
+    }
 }
 
 export {Sentence as SentenceDao}
