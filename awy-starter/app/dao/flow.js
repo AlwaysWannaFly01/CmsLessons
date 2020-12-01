@@ -11,6 +11,13 @@ class Flow {
         })
         return res;
     }
+
+    static async getFlowList() {
+        return await FlowModel.findAll({
+            //按照index排序
+            order: ['index']
+        })
+    }
 }
 
 export {Flow as FlowDao}

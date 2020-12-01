@@ -19,7 +19,7 @@ Music.init(
             type: Sequelize.STRING(300),
             allowNull: true
         },
-        url:{
+        url: {
             type: Sequelize.STRING(100),
             allowNull: true
         },
@@ -47,7 +47,7 @@ Music.init(
         //定义模型名称
         modelName: 'music',
         paranoid: true,
-        underscored:true,
+        underscored: true,
         //自动导入时间
         timeStamps: true,
         createdAt: 'created_at',

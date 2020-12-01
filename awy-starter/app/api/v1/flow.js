@@ -3,6 +3,7 @@ import {groupRequired} from "../../middleware/jwt";
 import {logger} from '../../middleware/logger';
 import {AddFlowValidator} from '../../validators/flow'
 import {FlowDao} from "../../dao/flow";
+import {FlowService} from "../../service/flow";
 
 const flowApi = new LinRouter({
     prefix: '/v1/flow'
@@ -29,6 +30,16 @@ flowApi.linPost(
             msg: '最新期刊内容新增成功'
         })
     });
+
+flowApi.get('/', async ctx => {
+    //1.flow
+    //2.根据结果里面的art_id,type字段查询相应类型的期刊内容
+    //3.格式化数据
+    //4.返回数据
+    const flowList = await FlowService.getFlowList()
+    ctx.json(flowList)
+})
+
 
 module.exports = {
     flowApi
