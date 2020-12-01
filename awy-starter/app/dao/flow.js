@@ -28,6 +28,14 @@ class Flow {
             index, type, art_id, status
         })
     }
+
+    static async deleteFlow(id) {
+        const flow = await FlowModel.findByPk(id);
+        if (!flow) {
+            throw new NotFound()
+        }
+        await flow.destroy()
+    }
 }
 
 export {Flow as FlowDao}
