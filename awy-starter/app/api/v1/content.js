@@ -2,6 +2,7 @@ import {LinRouter} from 'lin-mizar';
 import {AddContentValidator, DeleteContentValitator, EditContentValitator} from "../../validators/content";
 import {ContentService} from "../../service/content";
 import {groupRequired} from "../../middleware/jwt";
+import { logger } from '../../middleware/logger';
 
 const contentApi = new LinRouter({
     prefix: '/v1/content'
@@ -18,6 +19,7 @@ contentApi.linPost(
     },
     /*被 groupRequired 装饰的视图函数需登陆且被授予相应的权限后才可访问*/
     groupRequired,
+    logger("{user.username}就是皮了一波"), // logger，参数为日志内容
     async (ctx) => {
         //1.参数校验
         const v = await new AddContentValidator().validate(ctx)
