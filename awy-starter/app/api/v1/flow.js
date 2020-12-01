@@ -1,7 +1,7 @@
 import {LinRouter} from 'lin-mizar';
 import {groupRequired} from "../../middleware/jwt";
 import {logger} from '../../middleware/logger';
-import {AddFlowValidator} from '../../validators/flow'
+import {AddFlowValidator, EditFlowValidator} from '../../validators/flow'
 import {FlowDao} from "../../dao/flow";
 import {FlowService} from "../../service/flow";
 
@@ -9,6 +9,9 @@ const flowApi = new LinRouter({
     prefix: '/v1/flow'
 });
 
+/**
+ *新增最新期刊
+ */
 flowApi.linPost(
     'addFlow',//标识
     '/',
@@ -30,7 +33,9 @@ flowApi.linPost(
             msg: '最新期刊内容新增成功'
         })
     });
-
+/**
+ *最新期刊列表查询
+ */
 flowApi.get('/', async ctx => {
     //1.flow
     //2.根据结果里面的art_id,type字段查询相应类型的期刊内容
@@ -39,7 +44,33 @@ flowApi.get('/', async ctx => {
     const flowList = await FlowService.getFlowList()
     ctx.json(flowList)
 })
+/**
+ *最新期刊列表编辑
+ */
+flowApi.linPut(
+    'editFlow',
+    '/:id',
+    {
+        permission: '编辑最新期刊',
+        module: '最新期刊管理',
+        mount: true
+    },
+    groupRequired,
+    logger("{user.username}编辑了最新期刊"),
+    async ctx => {
+        const v = await new EditFlowValidator().validate(ctx);
+        const id = v.get('path.id');
+        const index = v.get('body.index');
+        const type = v.get('body.type');
+        const art_id = v.get('body.art_id');
+        const status = v.get('body.status');
 
+        await FlowDao.editFlow(id, index, type, art_id, status)
+        ctx.success({
+            msg: '最新期刊列表编辑成功'
+        })
+    }
+)
 
 module.exports = {
     flowApi

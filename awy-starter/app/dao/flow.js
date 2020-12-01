@@ -18,6 +18,16 @@ class Flow {
             order: ['index']
         })
     }
+
+    static async editFlow(id, index, type, art_id, status) {
+        const flow = await FlowModel.findByPk(id);
+        if (!flow) {
+            throw new NotFound()
+        }
+        await flow.update({
+            index, type, art_id, status
+        })
+    }
 }
 
 export {Flow as FlowDao}
