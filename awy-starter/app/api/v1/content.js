@@ -1,23 +1,34 @@
 import {LinRouter} from 'lin-mizar';
 import {AddContentValidator, DeleteContentValitator, EditContentValitator} from "../../validators/content";
 import {ContentService} from "../../service/content";
+import {groupRequired} from "../../middleware/jwt";
 
 const contentApi = new LinRouter({
     prefix: '/v1/content'
 });
 
 /*新增期刊内容*/
-contentApi.post('/', async (ctx) => {
-    //1.参数校验
-    const v = await new AddContentValidator().validate(ctx)
-    //2.执行业务逻辑
-    //3.插入数据库
-    await ContentService.addContent(v.get('body'))
-    ctx.success({
-        msg: '期刊内容新增成功'
-    })
-    //4.返回成功
-});
+contentApi.linPost(
+    'addContent',//标识
+    '/',
+    {
+        permission: '添加期刊内容',
+        module: '内容管理',
+        mount: true
+    },
+    /*被 groupRequired 装饰的视图函数需登陆且被授予相应的权限后才可访问*/
+    groupRequired,
+    async (ctx) => {
+        //1.参数校验
+        const v = await new AddContentValidator().validate(ctx)
+        //2.执行业务逻辑
+        //3.插入数据库
+        await ContentService.addContent(v.get('body'))
+        ctx.success({
+            msg: '期刊内容新增成功'
+        })
+        //4.返回成功
+    });
 
 /*查看期刊列表*/
 contentApi.get('/', async ctx => {
