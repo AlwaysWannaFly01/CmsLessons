@@ -16,7 +16,7 @@ module.exports = {
     semi: ['error', 'never'], // 无分号
     'no-extra-semi': 0, // 和prettier冲突
     'no-plusplus': 0, // 禁止使用++，--
-    // 'no-tabs': [o],
+    'no-tabs': 0,
     'guard-for-in': 0,
     'max-len': ['error', { code: 200 }],
     'no-restricted-syntax': 0,
@@ -35,6 +35,7 @@ module.exports = {
     'comma-dangle': ['error', 'only-multiline'],
     'no-param-reassign': ['error', { props: false }],
     'max-len': 0,
+    "no-mixed-spaces-and-tabs": 0,//关闭禁止混用tab和空格
   },
   parserOptions: {
     parser: 'babel-eslint',

@@ -2,7 +2,8 @@ import adminConfig from './admin'
 import bookConfig from './book' // 引入图书管理路由文件
 import pluginsConfig from './plugins'
 import Utils from '@/lin/utils/util'
-
+import content from './content'
+import contentRouter from "./content";
 // eslint-disable-next-line import/no-mutable-exports
 let homeRouter = [
   {
@@ -46,6 +47,7 @@ let homeRouter = [
   },
   bookConfig,
   adminConfig,
+  contentRouter
 ]
 
 const plugins = [...pluginsConfig]

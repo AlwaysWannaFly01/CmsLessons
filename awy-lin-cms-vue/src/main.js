@@ -26,9 +26,9 @@ Vue.config.productionTip = false
 
 Vue.use(ElementUI)
 Vue.use(LinNotify, {
-  reconnection: true,
-  reconnectionAttempts: 5,
-  reconnectionDelay: 3000,
+    reconnection: true,
+    reconnectionAttempts: 5,
+    reconnectionDelay: 3000,
 })
 
 Vue.component(CollapseTransition.name, CollapseTransition)
@@ -40,9 +40,9 @@ Vue.component('source-code', SourceCode)
 
 /* eslint no-unused-vars: 0 */
 const AppInstance = new Vue({
-  router,
-  store,
-  render: h => h(App),
+    router,
+    store,
+    render: h => h(App),
 }).$mount('#app')
 
 // 设置 App 实例
