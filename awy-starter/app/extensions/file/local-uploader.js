@@ -53,7 +53,8 @@ class LocalUploader extends Uploader {
         arr.push({
           id: saved.id,
           key: file.fieldname,
-          path: exist.path,
+          // path: exist.path,//此处有错误,进入else,exist为空
+          path: saved.path,
           url: `${siteDomain}/assets/${saved.path}`,
           type: saved.type,
           name: file.name,

@@ -1,4 +1,4 @@
-import {get, post} from "lin/plugins/axios";
+import {get, post, put} from "lin/plugins/axios";
 
 class Content {
     static async getContentList() {
@@ -8,6 +8,11 @@ class Content {
 
     static async addContent(data) {
         const res = await post('v1/content', {...data});
+        return res;
+    }
+
+    static async editContent(id, data) {
+        const res = await put(`v1/content/${id}`, {...data});
         return res;
     }
 }

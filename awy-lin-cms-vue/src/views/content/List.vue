@@ -61,9 +61,9 @@
                     </upload-imgs>
                 </el-form-item>
                 <el-form-item label="内容类型" prop="type">
-                    <el-radio v-model="temp.type" :label="100">电影</el-radio>
-                    <el-radio v-model="temp.type" :label="200">音乐</el-radio>
-                    <el-radio v-model="temp.type" :label="300">句子</el-radio>
+                    <el-radio v-model="temp.type" :disabled="dialogTitle==='编辑内容'" :label="100">电影</el-radio>
+                    <el-radio v-model="temp.type" :disabled="dialogTitle==='编辑内容'" :label="200">音乐</el-radio>
+                    <el-radio v-model="temp.type" :disabled="dialogTitle==='编辑内容'" :label="300">句子</el-radio>
                 </el-form-item>
                 <el-form-item label="内容标题" prop="title">
                     <el-col :span="11">
@@ -137,14 +137,19 @@ export default {
                 status: '',
             },
             rules: {
-                // image: [{required: true, message: '内容封面不能为空', trigger: 'blur'}],
-                type: [{required: true, message: '请指定内容内心', trigger: 'blur'}],
+                image: [{required: true, message: '内容封面不能为空', trigger: 'blur'}],
+                type: [{required: true, message: '请指定内容类型', trigger: 'blur'}],
                 title: [{required: true, message: '内容标题不能为空', trigger: 'blur'}],
                 content: [{required: true, message: '内容介绍不能为空', trigger: 'blur'}],
                 url: [{type: 'url', message: 'url格式不正确', trigger: 'blur'}],
                 pubdate: [{required: true, message: '发布时间不能为空', trigger: 'blur'}],
             },
-            contentImgData: []
+            contentImgData: [],
+            uploadRules: {
+                minWidth: 100,
+                minHeight: 100,
+                maxSize: 5
+            }
         }
     },
     created() {
@@ -163,15 +168,29 @@ export default {
             this.$refs.form.resetFields();
             this.showDialog = false;
         },
-        handleEdit() {
+        handleEdit(row) {
+            this.dialogTitle = '编辑内容';
+            this.showDialog = true;
+            this.temp = {
+                id: row.id,
+                image: row.image,
+                type: row.type,
+                title: row.title,
+                content: row.content,
+                url: row.url,
+                pubdate: row.pubdate,
+                status: row.status,
+            }
+            this.contentImgData.push({
+                display: row.image
+            })
         },
         handleDelete() {
         },
         async confirmAdd() {
             const images = await this.$refs.uploadEle.getValue();
             console.log(images)
-            // this.temp.image = images.length < 1 ? '' : images[0].src;
-            this.temp.image = 'http://www.baidu.com';
+            this.temp.image = images.length < 1 ? '' : images[0].src;
             this.$refs.form.validate(async valid => {
                 if (valid) {
                     delete this.temp.id
@@ -179,14 +198,31 @@ export default {
                     this.showDialog = false;
                     this.$message.success(res.message);
                     await this.getContentList();
-                }else{
+                } else {
                     console.log(valid)
                 }
             })
         },
-        confirmEdit() {
+        async confirmEdit() {
+            const images = await this.$refs.uploadEle.getValue();
+            this.temp.image = 'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1769048876,1147767271&fm=26&gp=0.jpg';
+            this.$refs.form.validate(async valid => {
+                if (valid) {
+                    const id = this.temp.id;
+                    delete this.temp.id;
+                    const res = ContentModel.editContent(id, this.temp);
+                    this.showDialog = false;
+                    this.$message.success(res.message);
+                    await this.getContentList();
+                } else {
+                    console.log(valid)
+                }
+            })
 
         },
+        beforeUpload(file) {
+            console.log(file)
+        }
     }
 }
 </script>
