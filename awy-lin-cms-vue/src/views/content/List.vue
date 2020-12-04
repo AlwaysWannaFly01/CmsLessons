@@ -98,6 +98,14 @@
                     </el-button>
                 </span>
         </el-dialog>
+
+        <el-dialog title="提示" :visible.sync="showDeleteDialog" width="400px">
+            <span>确认删除内容?</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="showDeleteDialog = false">取消</el-button>
+                <el-button @click="confirmDelete" type="danger">删除</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -149,7 +157,8 @@ export default {
                 minWidth: 100,
                 minHeight: 100,
                 maxSize: 5
-            }
+            },
+            showDeleteDialog: false
         }
     },
     created() {
@@ -185,35 +194,57 @@ export default {
                 display: row.image
             })
         },
-        handleDelete() {
+        handleDelete(row) {
+            this.showDeleteDialog = true;
+            this.temp.id = row.id;
+            this.temp.type = row.type;
         },
         async confirmAdd() {
             const images = await this.$refs.uploadEle.getValue();
             console.log(images)
+            /*当文件新上传时,获取src才会有值*/
             this.temp.image = images.length < 1 ? '' : images[0].src;
             this.$refs.form.validate(async valid => {
                 if (valid) {
                     delete this.temp.id
-                    const res = ContentModel.addContent(this.temp);
-                    this.showDialog = false;
-                    this.$message.success(res.message);
-                    await this.getContentList();
+                    const res = await ContentModel.addContent(this.temp);
+                    console.log(res)
+                    if (res.code === 0) {
+                        this.$message({
+                            message: res.message,
+                            type: 'success',
+                            onClose: async () => {
+                                this.showDialog = false;
+                                await this.getContentList();
+                            }
+                        });
+                    }
                 } else {
                     console.log(valid)
                 }
             })
         },
         async confirmEdit() {
+            console.log(this.temp)
             const images = await this.$refs.uploadEle.getValue();
-            this.temp.image = 'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1769048876,1147767271&fm=26&gp=0.jpg';
+            /*不新上传图片,src为空,会触发表单非空验证;此时获取display才会有值*/
+            console.log(images)
+            this.temp.image = images.length < 1 ? '' : images[0].display;
             this.$refs.form.validate(async valid => {
                 if (valid) {
                     const id = this.temp.id;
                     delete this.temp.id;
-                    const res = ContentModel.editContent(id, this.temp);
-                    this.showDialog = false;
-                    this.$message.success(res.message);
-                    await this.getContentList();
+                    const res = await ContentModel.editContent(id, this.temp);
+                    if (res.code === 0) {
+                        this.$message({
+                            message: res.message,
+                            type: 'success',
+                            onClose: async () => {
+                                this.showDialog = false;
+                                await this.getContentList();
+                            }
+                        });
+                    }
                 } else {
                     console.log(valid)
                 }
@@ -222,6 +253,26 @@ export default {
         },
         beforeUpload(file) {
             console.log(file)
+        },
+        async confirmDelete() {
+            console.log(this.temp)
+            const res = await ContentModel.deleteContent(this.temp.id, this.temp.type);
+            console.log(res)
+            if (res.code === 0) {
+                this.$message({
+                    message: res.message,
+                    type: 'success',
+                    onClose: async () => {
+                        this.showDeleteDialog = false;
+                        await this.getContentList();
+                    }
+                });
+            } else {
+                this.$message({
+                    message: '操作失败',
+                    type: 'failure'
+                });
+            }
         }
     }
 }
