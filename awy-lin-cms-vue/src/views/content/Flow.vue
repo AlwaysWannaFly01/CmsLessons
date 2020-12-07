@@ -58,7 +58,7 @@
                     <el-button @click="showDialog=false">
                         取消
                     </el-button>
-                    <el-button @click="dialogTitle==='添加期刊'?confirmAdd():confirmEdit()">
+                    <el-button @click="dialogTitle==='添加期刊'?confirmAdd():confirmEdit()" type="primary">
                         保存
                     </el-button>
                 </span>
@@ -91,7 +91,9 @@ export default {
             rules: {
                 art: [{required: true, message: '期刊内容不能为空', trigger: 'blur'}],
             },
-            options: []
+            options: [],
+            id: null,
+
         }
     },
     created() {
@@ -104,11 +106,16 @@ export default {
         handleAdd() {
             this.dialogTitle = '添加期刊';
             this.showDialog = true;
-
             this.getContentOptions()
         },
-        handleEdit() {
-
+        handleEdit(row) {
+            this.id = row.id
+            this.temp.index = row.index
+            this.temp.art = [row.detail.type, row.detail.id]
+            this.temp.status = row.status
+            this.dialogTitle = '编辑期刊'
+            this.showDialog = true
+            this.getContentOptions()
         },
         handleDelete() {
 
@@ -136,7 +143,21 @@ export default {
             })
         },
         confirmEdit() {
-
+            this.$refs.form.validate(async valid => {
+                if (valid) {
+                    const res = await FlowModel.editFlow(this.id, this.temp.index, this.temp.art[0], this.temp.art[1], this.temp.status)
+                    if (res.code === 0) {
+                        this.$message({
+                            message: res.message,
+                            type: 'success',
+                            onClose: async () => {
+                                this.showDialog = false;
+                                await this.getFlowList();
+                            }
+                        });
+                    }
+                }
+            })
         },
         async getContentOptions() {
             //获取所有期刊内容

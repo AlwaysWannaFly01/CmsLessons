@@ -1,4 +1,4 @@
-import {get, post} from '../lin/plugins/axios'
+import {get, post, put} from '../lin/plugins/axios'
 
 class Flow {
     static async getFlowList() {
@@ -11,6 +11,13 @@ class Flow {
             index, type, art_id, status
         })
         return res
+    }
+
+    static async editFlow(id, index, type, art_id, status) {
+        const res = await put(`v1/flow/${id}`, {
+            id, index, type, art_id, status
+        })
+        return res;
     }
 }
 
