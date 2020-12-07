@@ -1,6 +1,7 @@
 import {FlowModel} from "../models/flow";
 import {FlowDao} from "../dao/flow";
 import {MovieModel} from "../models/movie";
+import {MusicModel} from "../models/music";
 import {SentenceModel} from "../models/sentence";
 
 class Flow {
