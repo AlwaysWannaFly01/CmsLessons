@@ -63,6 +63,13 @@
                     </el-button>
                 </span>
         </el-dialog>
+        <el-dialog title="提示" :visible.sync="showDeleteDialog" width="400px">
+            <span>确认删除内容?</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="showDeleteDialog = false">取消</el-button>
+                <el-button @click="confirmDelete" type="danger">删除</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -93,7 +100,7 @@ export default {
             },
             options: [],
             id: null,
-
+            showDeleteDialog: false
         }
     },
     created() {
@@ -117,8 +124,9 @@ export default {
             this.showDialog = true
             this.getContentOptions()
         },
-        handleDelete() {
-
+        handleDelete(row) {
+            this.id = row.id;
+            this.showDeleteDialog = true;
         },
         resetForm() {
             this.$refs.form.resetFields();
@@ -194,6 +202,19 @@ export default {
                 options[index].children = children
             })
             return options;
+        },
+        async confirmDelete() {
+            const res = await FlowModel.deleteFlow(this.id)
+            if (res.code === 0) {
+                this.$message({
+                    message: res.message,
+                    type: 'success',
+                    onClose: async () => {
+                        this.showDeleteDialog = false;
+                        await this.getFlowList();
+                    }
+                });
+            }
         }
     }
 }
