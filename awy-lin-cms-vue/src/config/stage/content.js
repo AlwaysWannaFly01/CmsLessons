@@ -25,6 +25,7 @@ const contentRouter = {
             filePath: 'views/content/Flow.vue',
             inNav: true,
             icon: 'iconfont icon-tushuguanli',
+            // permission: ['超级管理员独有权限'], //控制菜单显示
         },
     ],
 }

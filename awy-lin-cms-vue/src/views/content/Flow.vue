@@ -4,7 +4,8 @@
             最新期刊
         </div>
         <div class="add-button">
-            <el-button type="primary" @click="handleAdd">添加期刊</el-button>
+            <!--v-permission 这个指令的值要和后端接口中的permission保持一致-->
+            <el-button type="primary" @click="handleAdd" v-permission="'新增最新期刊'">添加期刊</el-button>
         </div>
         <div class="table-container">
             <el-table :data="tableData" border highlight-current-row :cell-style="{'text-align':'center'}">
@@ -25,11 +26,11 @@
                 </el-table-column>
                 <el-table-column label="操作" fixed="right">
                     <template slot-scope="scope">
-                        <el-button @click="handleEdit(scope.row)" v-permission="{permission:'编辑内容',type:'disabled'}">
+                        <el-button @click="handleEdit(scope.row)" v-permission="{permission:'编辑最新期刊列表',type:'disabled'}">
                             编辑
                         </el-button>
                         <el-button type="danger" @click="handleDelete(scope.row)"
-                                   v-permission="{permission:'删除内容',type:'disabled'}">删除
+                                   v-permission="'删除最新期刊列表内容'">删除
                         </el-button>
                     </template>
                 </el-table-column>

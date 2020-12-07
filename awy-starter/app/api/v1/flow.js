@@ -16,7 +16,7 @@ flowApi.linPost(
     'addFlow',//标识
     '/',
     {
-        permission: '添加最新期刊',
+        permission: '新增最新期刊',
         module: '最新期刊管理',
         mount: true
     },
@@ -51,7 +51,7 @@ flowApi.linPut(
     'editFlow',
     '/:id',
     {
-        permission: '编辑最新期刊',
+        permission: '编辑最新期刊列表',
         module: '最新期刊管理',
         mount: true
     },
